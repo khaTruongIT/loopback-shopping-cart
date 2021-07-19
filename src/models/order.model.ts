@@ -1,6 +1,6 @@
 import {Entity, model, property, belongsTo} from '@loopback/repository';
 import {User} from './user.model';
-
+import { CartItem } from './cart-item.model';
 
 export enum OrderStatus {
   Completed = 'completed',
@@ -19,9 +19,9 @@ export class Order extends Entity {
   @property({
     default: OrderStatus.Created
   })
-  status: string
+  status: string;
 
-  @property() total: number
+  @property() total: number;
 
   @property({
     type: 'date'
@@ -31,6 +31,10 @@ export class Order extends Entity {
   @belongsTo(() => User)
   userId: string;
 
+  @property.array(CartItem, {
+    required: true
+  })
+  products: CartItem[];
 
   constructor(data?: Partial<Order>) {
     super(data);

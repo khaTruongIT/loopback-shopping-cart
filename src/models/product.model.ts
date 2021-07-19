@@ -18,9 +18,8 @@ import {Category} from './category.model';
 export class Product extends Entity {
 
   @property({
-    type:'number',
+    type:'string',
     id: true,
-    generated: true,
   })
   id : string;
 

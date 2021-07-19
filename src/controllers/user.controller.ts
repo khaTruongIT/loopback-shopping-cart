@@ -26,9 +26,6 @@ import {validateCredentials} from '../services/validator';
 import {CredentialsRequestBody, UserProfileSchema} from '../utlis/schema';
 
 
-
-
-
 export class UserController {
   constructor(
     @repository(UserRepository) public userRepository: UserRepository,

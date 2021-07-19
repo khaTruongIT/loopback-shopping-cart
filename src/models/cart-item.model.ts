@@ -4,7 +4,7 @@ import {Entity, model, property} from '@loopback/repository';
 export class CartItem extends Entity {
 
   @property({id: true})
-  productId: number;
+  productId: string;
 
   @property()
   name: string;

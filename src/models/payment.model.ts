@@ -25,14 +25,14 @@ export class Payment extends Entity {
   @property() stripeId: string;
 
   @property({
-    type: 'number'
+    type: 'string'
   })
-  orderId: number;
+  orderId: string;
 
   @property({
-    type: 'number'
+    type: 'string'
   })
-  userId: number;
+  userId: string;
 
   @belongsTo(() => User)
   user: User
