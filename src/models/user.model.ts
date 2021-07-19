@@ -3,12 +3,22 @@ import {Order} from './order.model';
 import {Cart} from './cart.model';
 
 
-@model()
+@model({
+  settings: {
+    postgresql: {
+      schema: 'public', table: 'user'
+    }
+  }
+})
 export class User extends Entity {
 
   @property({
     type: 'string',
     id: true,
+    postgresql: {
+      columnName: 'id',
+      dataType: 'text'
+    }
   })
   id: string;
 
@@ -17,7 +27,7 @@ export class User extends Entity {
     required: true
   })
   password: string;
-  
+
   @property({
     type: 'string',
     required: true,
