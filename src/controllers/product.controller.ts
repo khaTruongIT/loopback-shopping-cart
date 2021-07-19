@@ -130,7 +130,7 @@ export class ProductController {
     return this.productRepository.count(where);
   }
 
-  //xem danh mục sản phẩm
+  //xem sản phẩm 
   @get('/products', {
     responses: {
       '200': {
