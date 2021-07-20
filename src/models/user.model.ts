@@ -23,7 +23,7 @@ export class User extends Entity {
   id: string;
 
   @property({
-    type: 'srtring',
+    type: 'string',
     required: true
   })
   password: string;
