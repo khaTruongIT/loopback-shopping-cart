@@ -17,6 +17,8 @@ import {AuthenticationComponent} from '@loopback/authentication';
 import {DbDataSource} from './datasources';
 
 
+
+
 export {ApplicationConfig};
 
 export class ShoppingCartApplication extends BootMixin(

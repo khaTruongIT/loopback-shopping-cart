@@ -159,7 +159,6 @@ async printCurrentUser(
     return {token};
   }
 
-
 }
 
 
