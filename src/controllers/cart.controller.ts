@@ -106,7 +106,7 @@ export class CartController {
   @authenticate('jwt')
   @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
   async addItem(
-    @param.path.string('userId') userId: string,
+    @param.path.number('userId') userId: number,
     @requestBody({description: 'cart item'}) item: CartItem,
   ): Promise<Cart> {
     return this.cartRepository.addItem(userId, item);

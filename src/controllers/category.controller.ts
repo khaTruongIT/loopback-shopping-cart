@@ -87,7 +87,7 @@ export class CategoryController {
       async findById(@param.path.string('id') id: string): Promise<Category> {
         return await this.categoryRepository.findById(id);
       }
-      
+
       //xóa category
       @del('/categories/{id}', {
         responses: {

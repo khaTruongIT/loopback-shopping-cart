@@ -13,7 +13,7 @@ export class CartRepository extends DefaultKeyValueRepository<Cart> {
     super(Cart, dataSource);
   }
 
-  addItem(userId: string, item: CartItem) {
+  addItem(userId: number, item: CartItem) {
     const task: Task<Cart> = {
       run: async () => {
         const addItemToCart = (cart: Cart | null) => {
@@ -35,7 +35,7 @@ export class CartRepository extends DefaultKeyValueRepository<Cart> {
 
 
   async checkAndSet(
-    userId: string,
+    userId: number,
     check: (current: Cart | null) => Cart | null,
   ) {
     const connector = this.kvModelClass.dataSource!.connector!;
@@ -53,11 +53,11 @@ export class CartRepository extends DefaultKeyValueRepository<Cart> {
      * - EXEC
      */
     await execute('WATCH', [userId]);
-    let cart: Cart | null = await this.get(userId);
+    let cart: Cart | null = await this.get(userId.toString());
     cart = check(cart);
     if (!cart) return null;
     await execute('MULTI', []);
-    await this.set(userId, cart);
+    await this.set(userId.toString(), cart);
     const result = await execute('EXEC', []);
     return result == null ? null : cart;
   }

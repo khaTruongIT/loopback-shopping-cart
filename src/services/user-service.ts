@@ -48,7 +48,7 @@ export class MyUserService implements UserService<User, Credentials> {
           ? `${userName} ${user.lastName}`
           : `${user.lastName}`;
       return {
-        [securityId] : user.id,
+        [securityId] : (user.id).toString(),
         name: userName,
         id: user.id,
         roles: user.roles

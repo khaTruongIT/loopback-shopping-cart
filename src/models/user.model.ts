@@ -13,7 +13,7 @@ import {Cart} from './cart.model';
 export class User extends Entity {
 
   @property({
-    type: 'string',
+    type: 'number',
     id: true,
       postgresql: {
         columnName: 'id',
@@ -51,14 +51,13 @@ export class User extends Entity {
   roles?: string[];
 
   @property({
-    type: 'string',
+    type: 'Date',
+    postgresql: {
+      column: 'createdAt',
+      type: 'timestamp with time zone'
+    }
   })
-  resetTimestamp: string;
-
-  @property({
-    type: 'string',
-  })
-  resetKeyTimestamp: string;
+  createdAt: Date;
 
   @hasMany(() => Order)
   orders: Order[];
