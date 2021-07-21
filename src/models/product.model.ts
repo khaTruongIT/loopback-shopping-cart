@@ -1,20 +1,7 @@
 import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Category} from './category.model';
 
-@model(
-//   {
-//   settings: {
-//     foreignKeys: {
-//       fk_category_id: {
-//         name: 'fk_category_id',
-//         entity: 'Category',
-//         entityKey: 'id',
-//         foreignKey: 'categoryId'
-//       }
-//     }
-//   }
-// }
-)
+@model()
 export class Product extends Entity {
 
   @property({
@@ -63,7 +50,11 @@ export class Product extends Entity {
   categoryId: string;
 
   @property({
-    type: 'number'
+    type: 'number',
+    postgresql: {
+      column: 'price',
+      dataType: 'numeric'
+    }
   })
   price: number
 

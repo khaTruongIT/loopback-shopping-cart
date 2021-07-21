@@ -33,7 +33,7 @@ export class OrderController  {
   @authenticate('jwt')
   @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
   async createOrder(
-    @param.path.string('userId') userId: string,
+    @param.path.number('userId') userId: number,
     @requestBody() order: Order
   ): Promise<Order> {
     order.date = new Date().toString();
@@ -62,7 +62,7 @@ export class OrderController  {
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
   async listOrders(
-    @param.path.string('userId') userId: string,
+    @param.path.number('userId') userId: number,
   ): Promise<Order[]> {
     const orders = await this.orderRepository.find(
      {
@@ -83,7 +83,7 @@ export class OrderController  {
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin'], voters:[basicAuthorization]})
   async updateOrder(
-    @param.path.string('orderId') orderId: string,
+    @param.path.number('orderId') orderId: number,
     @requestBody({
       'application/json': {
         schema: getModelSchemaRef(Order, {partial: true})

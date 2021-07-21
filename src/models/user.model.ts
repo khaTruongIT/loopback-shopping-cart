@@ -15,12 +15,12 @@ export class User extends Entity {
   @property({
     type: 'string',
     id: true,
-    postgresql: {
-      columnName: 'id',
-      dataType: 'text'
-    }
+      postgresql: {
+        columnName: 'id',
+        dataType: 'integer'
+      }
   })
-  id: string;
+  id: number;
 
   @property({
     type: 'string',

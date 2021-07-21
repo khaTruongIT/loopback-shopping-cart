@@ -100,7 +100,7 @@ export class UserController {
    allowedRoles: ['admin', 'customer'],
    voters: [basicAuthorization],
  })
- async findById(@param.path.string('userId') userId: string): Promise<User> {
+ async findById(@param.path.number('userId') userId: number): Promise<User> {
    return this.userRepository.findById(userId);
  }
 
@@ -120,7 +120,7 @@ export class UserController {
 async printCurrentUser(
   @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
 ): Promise<User> {
-  const userId = currentUserProfile[securityId];
+  const userId = parseInt(currentUserProfile[securityId]);
   return this.userRepository.findById(userId);
 }
 

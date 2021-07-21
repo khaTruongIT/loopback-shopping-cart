@@ -30,9 +30,9 @@ export class Payment extends Entity {
   orderId: string;
 
   @property({
-    type: 'string'
+    type: 'number'
   })
-  userId: string;
+  userId: number;
 
   @belongsTo(() => User)
   user: User

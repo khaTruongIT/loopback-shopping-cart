@@ -8,7 +8,7 @@ import {CartItem} from './cart-item.model';
 export class Cart extends Entity {
 
   @belongsTo(() => User)
-  userId: string;
+  userId: number;
 
   @property.array(CartItem)
   items?: CartItem[];

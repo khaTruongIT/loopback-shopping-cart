@@ -12,9 +12,9 @@ export enum OrderStatus {
 export class Order extends Entity {
   @property({
     id: true,
-    type: 'string',
+    type: 'number',
   })
-  id: string;
+  id: number;
 
   @property({
     default: OrderStatus.Created
@@ -29,7 +29,7 @@ export class Order extends Entity {
   date?: string;
 
   @belongsTo(() => User)
-  userId: string;
+  userId: number;
 
   @property.array(CartItem, {
     required: true
