@@ -7,9 +7,7 @@ import {authorize} from '@loopback/authorization';
 import {inject} from '@loopback/context';
 import {repository} from '@loopback/repository';
 import {
-  get,
-  getModelSchemaRef,
-  HttpErrors,
+  get, getModelSchemaRef, HttpErrors,
   param,
   post, requestBody
 } from '@loopback/rest';
@@ -24,12 +22,12 @@ import {basicAuthorization} from '../services/authorization';
 import {PasswordHasher} from '../services/hash.password.bcryptjs';
 import {validateCredentials} from '../services/validator';
 import {CredentialsRequestBody, UserProfileSchema} from '../utlis/schema';
-
+import { hashPassword } from '../services/hash.password.bcryptjs';
 
 export class UserController {
   constructor(
     @repository(UserRepository) public userRepository: UserRepository,
-    @inject(PasswordHasherBindings.PASSWORD_HASHER) public passwordHasher: PasswordHasher,
+    @inject(PasswordHasherBindings.PASSWORD_HASHER, {optional: true}) public passwordHasher: PasswordHasher,
     @inject(TokenServiceBindings.TOKEN_SERVICE) public jwtTokenService: TokenService,
     @inject(UserServiceBindings.USER_SERVICE) public userService: UserService<User, Credentials>,
   ) {}
@@ -52,7 +50,7 @@ export class UserController {
      'application/json' : {
        schema: getModelSchemaRef(User, {
          title: 'New User',
-       }),
+       })
      },
    })
    user: User,
@@ -61,18 +59,20 @@ export class UserController {
     user.roles = ['customer'];
     validateCredentials(_.pick(user, ['email', 'password']));
 
+    console.log(user.email + '...user.email');
+
     const foundUser = await this.userRepository.findOne({
-      where: {email: user.email}
+      where: {email: user.email},
     });
 
-    if(foundUser) {
+    if (foundUser) {
       throw new HttpErrors.UnprocessableEntity(
-        `User with email ${user.email} already exists`,
+        `User with email ${user.email} already exists.`,
       );
     }
 
     // encrypt the password
-    user.password = await this.passwordHasher.hashPassword(user.password);
+    user.password = await hashPassword(user.password, 8);
 
     // create the new user
     const savedUser = await this.userRepository.create(user);
