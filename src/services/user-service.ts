@@ -17,8 +17,6 @@ export class MyUserService implements UserService<User, Credentials> {
 
   async verifyCredentials(credentials: Credentials): Promise<User> {
 
-    const {email, password} = credentials;
-
     const foundUser = await this.userRepository.findOne({
       where: {email: credentials.email},
     });
@@ -29,8 +27,8 @@ export class MyUserService implements UserService<User, Credentials> {
       );
     }
     const passwordMatched = await this.passwordHasher.comparePassword(
-      password,
-      credentials.password
+      credentials.password,
+      foundUser.password
     );
 
     if (!passwordMatched) {
@@ -52,7 +50,7 @@ export class MyUserService implements UserService<User, Credentials> {
         name: userName,
         id: user.id,
         roles: user.roles
-      }
+      };
     }
 }
 

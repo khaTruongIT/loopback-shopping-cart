@@ -7,6 +7,7 @@ import {
 import {
   JWTAuthenticationComponent,
   UserServiceBindings,
+  TokenServiceBindings
 } from '@loopback/authentication-jwt';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
@@ -15,8 +16,10 @@ import path from 'path';
 import {MySequence} from './sequence';
 import {AuthenticationComponent} from '@loopback/authentication';
 import {DbDataSource} from './datasources';
-
-
+import { BcryptHasher } from './services/hash.password.bcryptjs';
+import { PasswordHasherBindings, TokenServiceConstants } from './keys';
+import { JwtService } from './services/jwt-service';
+import { MyUserService } from './services/user-service';
 
 
 export {ApplicationConfig};
@@ -58,5 +61,29 @@ export class ShoppingCartApplication extends BootMixin(
         nested: true,
       },
     };
+  }
+
+  setUpBindings(): void {
+    this.bind(TokenServiceBindings.TOKEN_SECRET).to(
+      TokenServiceConstants.TOKEN_SECRET_VALUE,
+    );
+
+    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to(
+      TokenServiceConstants.TOKEN_EXPIRES_IN_VALUE,
+    );
+
+    this.bind(TokenServiceBindings.TOKEN_SERVICE).toClass(JwtService);
+
+    // // Bind bcrypt hash services
+    this.bind(PasswordHasherBindings.ROUNDS).to(10);
+    this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
+
+    this.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);
+
+    // Customize @loopback/rest-explorer configuration here
+    this.bind(RestExplorerBindings.CONFIG).to({
+      path: '/explorer',
+    });
+    this.component(RestExplorerComponent);
   }
 }

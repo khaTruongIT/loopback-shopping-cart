@@ -24,6 +24,7 @@ import {validateCredentials} from '../services/validator';
 import {CredentialsRequestBody, UserProfileSchema} from '../utlis/schema';
 import { hashPassword } from '../services/hash.password.bcryptjs';
 
+
 export class UserController {
   constructor(
     @repository(UserRepository) public userRepository: UserRepository,
@@ -125,39 +126,42 @@ async printCurrentUser(
 }
 
 // đăng nhập
-  @post('/users/login', {
-    responses: {
-      '200': {
-        description: 'Token',
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                token: {
-                  type: 'string',
-                },
+@post('/users/login', {
+  responses: {
+    '200': {
+      description: 'Token',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              token: {
+                type: 'string',
               },
             },
           },
         },
       },
     },
-  })
-  async login(
-    @requestBody(CredentialsRequestBody) credentials: Credentials,
-  ): Promise<{token: string}> {
-    // ensure the user exists, and the password is correct
-    const user = await this.userService.verifyCredentials(credentials);
+  },
+})
+async login(
+  @requestBody(CredentialsRequestBody) credentials: Credentials,
+): Promise<{token: string}> {
+  // ensure the user exists, and the password is correct
+  const user = await this.userService.verifyCredentials(credentials);
+  console.log(user + '..... user');
 
-    // convert a User object into a UserProfile object (reduced set of properties)
-    const userProfile = this.userService.convertToUserProfile(user);
+  // convert a User object into a UserProfile object (reduced set of properties)
+  const userProfile = this.userService.convertToUserProfile(user);
 
-    // create a JSON Web Token based on the user profile
-    const token = await this.jwtTokenService.generateToken(userProfile);
+  // create a JSON Web Token based on the user profile
+  const token = await this.jwtTokenService.generateToken(userProfile);
 
-    return {token};
-  }
+  return {token};
+}
+
+
 
 }
 

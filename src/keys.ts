@@ -1,8 +1,8 @@
-import {BindingKey} from '@loopback/context';
-import {PasswordHasher} from './services/hash.password.bcryptjs';
 import {TokenService, UserService} from '@loopback/authentication';
+import {BindingKey} from '@loopback/context';
 import {User} from './models';
-import { Credentials } from './repositories';
+import {Credentials} from './repositories';
+import {PasswordHasher} from './services/hash.password.bcryptjs';
 
 export namespace TokenServiceConstants {
   export const TOKEN_SECRET_VALUE = 'abcdefgh';
