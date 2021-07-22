@@ -3,20 +3,23 @@ import {
   TokenService,
   UserService
 } from '@loopback/authentication';
+import {TokenServiceBindings} from '@loopback/authentication-jwt';
 import {authorize} from '@loopback/authorization';
 import {inject} from '@loopback/context';
-import {repository} from '@loopback/repository';
+import {repository, Count, CountSchema,Where} from '@loopback/repository';
 import {
   get, getModelSchemaRef, HttpErrors,
   param,
-  post, requestBody
+  post, requestBody,
+  patch,
+  del,
+  put,
 } from '@loopback/rest';
-import {SecurityBindings, securityId, UserProfile} from '@loopback/security';
+import {SecurityBindings, UserProfile} from '@loopback/security';
 import _ from 'lodash';
 import {
   PasswordHasherBindings, UserServiceBindings
 } from '../keys';
-import {TokenServiceBindings} from '@loopback/authentication-jwt';
 import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories/user.repository';
 import {basicAuthorization} from '../services/authorization';
@@ -98,7 +101,7 @@ export class UserController {
  })
  @authenticate('jwt')
  @authorize({
-   allowedRoles: ['admin', 'customer'],
+   allowedRoles: ['admin'],
    voters: [basicAuthorization],
  })
  async findById(
@@ -160,6 +163,79 @@ async login(
   const token = await this.jwtTokenService.generateToken(userProfile);
 
   return {token};
+}
+
+
+// update all user
+@patch('/users', {
+  responses: {
+    '200': {
+      description: 'User PATCH success count',
+      content: {'application/json': {schema: CountSchema}},
+    },
+  },
+})
+async updateAll(
+  @requestBody({
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(User, {partial: true}),
+      },
+    },
+  })
+  user: User,
+  @param.where(User) where?: Where<User>,
+): Promise<Count> {
+  return this.userRepository.updateAll(user, where);
+}
+
+//update users by id
+@patch('/users/{id}', {
+  responses: {
+    '204': {
+      description: 'User PATCH success',
+    },
+  },
+})
+async updateById(
+  @param.path.number('id') id: number,
+  @requestBody({
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(User, {partial: true}),
+      },
+    },
+  })
+  user: User,
+): Promise<void> {
+  await this.userRepository.updateById(id, user);
+}
+
+
+@put('/users/{id}', {
+  responses: {
+    '204': {
+      description: 'User PUT success',
+    },
+  },
+})
+async replaceById(
+  @param.path.number('id') id: number,
+  @requestBody() user: User,
+): Promise<void> {
+  await this.userRepository.replaceById(id, user);
+}
+
+//delete user 
+@del('/users/{id}', {
+  responses: {
+    '204': {
+      description: 'User DELETE success',
+    },
+  },
+})
+async deleteById(@param.path.number('id') id: number): Promise<void> {
+  await this.userRepository.deleteById(id);
 }
 
 }
