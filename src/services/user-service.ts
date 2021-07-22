@@ -47,13 +47,12 @@ export class MyUserService implements UserService<User, Credentials> {
         userName = user.firstName
           ? `${userName} ${user.lastName}`
           : `${user.lastName}`;
-      const profile = {
+          return  {
         [securityId] : user.id.toString(),
         name: userName,
         id: user.id,
         roles: user.roles
       };
-      return profile;
     }
 }
 

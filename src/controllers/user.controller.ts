@@ -14,8 +14,9 @@ import {
 import {SecurityBindings, securityId, UserProfile} from '@loopback/security';
 import _ from 'lodash';
 import {
-  PasswordHasherBindings, TokenServiceBindings, UserServiceBindings
+  PasswordHasherBindings, UserServiceBindings
 } from '../keys';
+import {TokenServiceBindings} from '@loopback/authentication-jwt';
 import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories/user.repository';
 import {basicAuthorization} from '../services/authorization';
@@ -89,9 +90,7 @@ export class UserController {
        description: 'User',
        content: {
          'application/json' : {
-           schema: {
-             'x-ts-type' : User,
-           }
+            schema: {'x-ts-type': User},
          }
        }
      }
@@ -102,8 +101,11 @@ export class UserController {
    allowedRoles: ['admin', 'customer'],
    voters: [basicAuthorization],
  })
- async findById(@param.path.number('userId') userId: number): Promise<User> {
-   return this.userRepository.findById(userId);
+ async findById(
+   @param.path.number('userId') userId: number): Promise<User> {
+   return this.userRepository.findById(userId, {
+     fields: {password: false}
+   });
  }
 
  @get('/users/me', {
@@ -150,7 +152,6 @@ async login(
 ): Promise<{token: string}> {
   // ensure the user exists, and the password is correct
   const user = await this.userService.verifyCredentials(credentials);
-  console.log(user + '..... user');
 
   // convert a User object into a UserProfile object (reduced set of properties)
   const userProfile = this.userService.convertToUserProfile(user);

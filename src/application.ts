@@ -12,14 +12,12 @@ import {MySequence} from './sequence';
 import { BcryptHasher } from './services/hash.password.bcryptjs';
 import {
   UserServiceBindings,
-  TokenServiceConstants,
   PasswordHasherBindings
 } from './keys';
 import { JwtService } from './services/jwt-service';
 import { MyUserService } from './services/user-service';
 import {
-  JWTAuthenticationComponent,
-  TokenServiceBindings,
+  JWTAuthenticationComponent, TokenServiceBindings
 } from '@loopback/authentication-jwt';
 import {AuthenticationComponent} from '@loopback/authentication';
 import {AuthorizationComponent} from '@loopback/authorization';
@@ -64,13 +62,7 @@ export class ShoppingCartApplication extends BootMixin(
   }
 
   setUpBindings(): void {
-    this.bind(TokenServiceBindings.TOKEN_SECRET).to(
-      TokenServiceConstants.TOKEN_SECRET_VALUE,
-    );
-
-    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to(
-      TokenServiceConstants.TOKEN_EXPIRES_IN_VALUE,
-    );
+ 
 
     this.bind(TokenServiceBindings.TOKEN_SERVICE).toClass(JwtService);
 

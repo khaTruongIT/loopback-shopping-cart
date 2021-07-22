@@ -1,5 +1,5 @@
 import {TokenService} from '@loopback/authentication';
-import {TokenServiceBindings} from '../keys';
+import {TokenServiceBindings} from '@loopback/authentication-jwt';
 import {inject} from '@loopback/context';
 import {HttpErrors} from '@loopback/rest';
 import {securityId, UserProfile} from '@loopback/security';
