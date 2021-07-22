@@ -1,7 +1,7 @@
-import {Entity, model, property, hasMany, hasOne} from '@loopback/repository';
-import {Order} from './order.model';
+import {Entity, hasMany, hasOne, model, property} from '@loopback/repository';
 import {Cart} from './cart.model';
-
+import {Order} from './order.model';
+import {UserCredentials} from './user-credentials.model';
 
 @model({
   settings: {
@@ -64,6 +64,9 @@ export class User extends Entity {
 
   @hasOne(() => Cart)
   cart: Cart;
+
+  @hasOne(() => UserCredentials, {keyTo: 'userId'})
+  userCredentials: UserCredentials;
 }
 
 export interface UserRelations {

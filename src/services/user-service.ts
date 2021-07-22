@@ -26,6 +26,7 @@ export class MyUserService implements UserService<User, Credentials> {
         `User with email ${credentials.email} not found.`,
       );
     }
+
     const passwordMatched = await this.passwordHasher.comparePassword(
       credentials.password,
       foundUser.password
@@ -37,6 +38,7 @@ export class MyUserService implements UserService<User, Credentials> {
 
     return foundUser;
   }
+
     convertToUserProfile(user: User): UserProfile {
       // since first name and lastName are optional, no error is thrown if not provided
       let userName = '';
@@ -45,12 +47,13 @@ export class MyUserService implements UserService<User, Credentials> {
         userName = user.firstName
           ? `${userName} ${user.lastName}`
           : `${user.lastName}`;
-      return {
-        [securityId] : (user.id).toString(),
+      const profile = {
+        [securityId] : user.id.toString(),
         name: userName,
         id: user.id,
         roles: user.roles
       };
+      return profile;
     }
 }
 

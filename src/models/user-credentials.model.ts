@@ -1,13 +1,15 @@
 import {Entity, model, property} from '@loopback/repository';
+import {User} from './user.model';
 
 @model()
 export class UserCredentials extends Entity {
+
   @property({
     type: 'number',
     id: true,
     generated: true,
   })
-  id?: number;
+  id: number;
 
   @property({
     type: 'string',
@@ -18,8 +20,8 @@ export class UserCredentials extends Entity {
   @property({
     type: 'number',
   })
-  userId?: number;
- 
+  userId: number;
+
 
   constructor(data?: Partial<UserCredentials>) {
     super(data);

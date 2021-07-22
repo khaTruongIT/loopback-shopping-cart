@@ -22,7 +22,7 @@ import {basicAuthorization} from '../services/authorization';
 import {PasswordHasher} from '../services/hash.password.bcryptjs';
 import {validateCredentials} from '../services/validator';
 import {CredentialsRequestBody, UserProfileSchema} from '../utlis/schema';
-import { hashPassword } from '../services/hash.password.bcryptjs';
+
 
 
 export class UserController {
@@ -73,7 +73,8 @@ export class UserController {
     }
 
     // encrypt the password
-    user.password = await hashPassword(user.password, 8);
+    // user.password = await hashPassword(user.password, 8);
+    user.password = await this.passwordHasher.hashPassword(user.password);
 
     // create the new user
     const savedUser = await this.userRepository.create(user);
@@ -120,9 +121,8 @@ export class UserController {
 @authenticate('jwt')
 async printCurrentUser(
   @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
-): Promise<User> {
-  const userId = parseInt(currentUserProfile[securityId]);
-  return this.userRepository.findById(userId);
+): Promise<UserProfile> {
+ return currentUserProfile;
 }
 
 // đăng nhập
@@ -160,8 +160,6 @@ async login(
 
   return {token};
 }
-
-
 
 }
 

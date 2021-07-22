@@ -4,23 +4,25 @@ import {
   RestExplorerBindings,
   RestExplorerComponent,
 } from '@loopback/rest-explorer';
-import {
-  JWTAuthenticationComponent,
-  UserServiceBindings,
-  TokenServiceBindings
-} from '@loopback/authentication-jwt';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
-import {AuthenticationComponent} from '@loopback/authentication';
-import {DbDataSource} from './datasources';
 import { BcryptHasher } from './services/hash.password.bcryptjs';
-import { PasswordHasherBindings, TokenServiceConstants } from './keys';
+import {
+  UserServiceBindings,
+  TokenServiceConstants,
+  PasswordHasherBindings
+} from './keys';
 import { JwtService } from './services/jwt-service';
 import { MyUserService } from './services/user-service';
-
+import {
+  JWTAuthenticationComponent,
+  TokenServiceBindings,
+} from '@loopback/authentication-jwt';
+import {AuthenticationComponent} from '@loopback/authentication';
+import {AuthorizationComponent} from '@loopback/authorization';
 
 export {ApplicationConfig};
 
@@ -29,6 +31,13 @@ export class ShoppingCartApplication extends BootMixin(
 ) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
+
+        // Bind authentication component related elements
+        this.component(AuthenticationComponent);
+        this.component(JWTAuthenticationComponent);
+        this.component(AuthorizationComponent);
+
+        this.setUpBindings();
 
     // Set up the custom sequence
     this.sequence(MySequence);
@@ -41,15 +50,6 @@ export class ShoppingCartApplication extends BootMixin(
       path: '/explorer',
     });
     this.component(RestExplorerComponent);
-
-    // ------ ADD SNIPPET AT THE BOTTOM ---------
-    // Mount authentication system
-    this.component(AuthenticationComponent);
-    // Mount jwt component
-    this.component(JWTAuthenticationComponent);
-    // Bind datasource
-    this.dataSource(DbDataSource, UserServiceBindings.DATASOURCE_NAME);
-    // ------------- END OF SNIPPET -------------
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
